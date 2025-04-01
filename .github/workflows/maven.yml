@@ -52,6 +52,8 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
-            docker stop spring-app || true
-            docker rm spring-app || true
-            docker run -d -p 8080:8080 --name spring-app ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
+            docker stop spring-app 2>/dev/null || true
+            docker rm -f spring-app 2>/dev/null || true
+            docker run -d -p 8080:8080 --name spring-app \
+              --restart=always \
+              ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
